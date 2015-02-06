@@ -1,6 +1,8 @@
 # Hockey
 
-TODO: Write a gem description
+Helper gem for HokceyApp API
+
+[![Build Status](https://travis-ci.org/yagihiro/hockey.svg?branch=master)](https://travis-ci.org/yagihiro/hockey)
 
 ## Installation
 
