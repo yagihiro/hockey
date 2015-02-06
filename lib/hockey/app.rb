@@ -15,11 +15,11 @@ module Hockey
 
     attr :net, :users
 
-    def self.create_from hashobj, networking
+    def self.create_from(hashobj, networking)
       self.new hashobj, networking
     end
 
-    def initialize hashobj, networking
+    def initialize(hashobj, networking)
       @title = hashobj['title']
       @bundle_identifier = hashobj['bundle_identifier']
       @public_identifier = hashobj['public_identifier']
@@ -38,7 +38,7 @@ module Hockey
     end
     alias_method :to_s, :inspect
 
-    def remove_user email:nil
+    def remove_user(email:nil)
       users()
       user = @users.find {|u| u.email == email }
 
