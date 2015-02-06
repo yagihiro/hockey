@@ -13,7 +13,7 @@ module Hockey
     attr_reader :platform
     attr_reader :original_hash
 
-    attr :net, :users
+    attr :net
 
     def self.create_from(hashobj, networking)
       self.new hashobj, networking
@@ -31,6 +31,7 @@ module Hockey
       @original_hash = hashobj
       @net = networking
       @users = nil
+      @versions = nil
     end
 
     def inspect
@@ -58,6 +59,19 @@ module Hockey
       end
 
       @users
+    end
+
+    def versions
+      return @versions if @versions
+
+      obj = @net.get_object "/api/2/apps/#{@public_identifier}/app_versions"
+
+      @versions = []
+      obj['app_versions'].each do |hashobj|
+        @versions << Version.create_from(hashobj, @net)
+      end
+
+      @versions
     end
 
     def invite_user(email:email)
