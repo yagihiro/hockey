@@ -60,6 +60,14 @@ module Hockey
       @users
     end
 
+    def invite_user(email:email)
+      obj = @net.post_object "/api/2/apps/#{@public_identifier}/app_users", {:email=>email, :role=>1}
+
+      user = User.create_from(obj, @net)
+
+      user
+    end
+
   end
 
 end
