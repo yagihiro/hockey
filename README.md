@@ -8,7 +8,7 @@ Helper gem for HokceyApp API
 
 Add this line to your application's Gemfile:
 
-    gem 'hockey'
+    gem 'hockeyhelper'
 
 And then execute:
 
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install hockey
+    $ gem install hockeyhelper
 
 ## Usage
 
