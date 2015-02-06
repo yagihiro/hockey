@@ -26,6 +26,15 @@ module Hockey
       @apps
     end
 
+    # create new app on HockeyApp
+    def new_app(title:title, bundle_identifier:bundle_identifier, platform: 'iOS')
+      obj = @net.post_object '/api/2/apps/new', {:title=>title, :bundle_identifier=>bundle_identifier, :platform=>platform, :release_type=>0}
+
+      app = App.create_from(obj, @net)
+
+      app
+    end
+
   end
 
 end

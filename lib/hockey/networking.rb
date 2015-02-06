@@ -45,6 +45,23 @@ module Hockey
       JSON.parse(response.body) || {}
     end
 
+    def post(path, bodyhash)
+      @l.info "POST #{path}, #{bodyhash}"
+
+      response = @client.post do |req|
+        req.url path
+        req.headers['X-HockeyAppToken'] = @token
+        req.body = bodyhash
+      end
+
+      response
+    end
+
+    def post_object(path, bodyhash)
+      response = post path, bodyhash
+      JSON.parse(response.body) || {}
+    end
+
     def delete(path)
       @l.info "DELETE #{path}"
 
