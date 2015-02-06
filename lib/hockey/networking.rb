@@ -19,7 +19,7 @@ module Hockey
 
     attr :l
 
-    def initialize token, debug:false
+    def initialize(token, debug:false)
       @client = Faraday.new(:url => 'https://rink.hockeyapp.net')
       @token = token
       @l = if debug
@@ -29,7 +29,7 @@ module Hockey
            end
     end
 
-    def get path
+    def get(path)
       @l.info "GET #{path}"
 
       response = @client.get do |req|
@@ -40,12 +40,12 @@ module Hockey
       response
     end
 
-    def get_object path
+    def get_object(path)
       response = get path
       JSON.parse(response.body) || {}
     end
 
-    def delete path
+    def delete(path)
       @l.info "DELETE #{path}"
 
       response = @client.delete do |req|

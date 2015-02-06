@@ -13,11 +13,11 @@ module Hockey
 
     attr :net
 
-    def self.create_from hashobj, networking
+    def self.create_from(hashobj, networking)
       self.new hashobj, networking
     end
 
-    def initialize hashobj, networking
+    def initialize(hashobj, networking)
       @role = hashobj['role']
       @id = hashobj['id']
       @user_id = hashobj['user_id']

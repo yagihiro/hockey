@@ -7,7 +7,7 @@ module Hockey
   class Client
 
     #
-    def initialize token, debug:false
+    def initialize(token, debug:false)
       @net = Networking.new token, debug:debug
       @apps = nil
     end
