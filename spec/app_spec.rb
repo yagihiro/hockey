@@ -1,4 +1,4 @@
-require_relative '../lib/hockey/app'
+require_relative '../lib/hockeyhelper/app'
 
 RSpec.describe Hockey::App do
 
