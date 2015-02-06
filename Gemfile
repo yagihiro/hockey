@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
-
-# Specify your gem's dependencies in hockey.gemspec
+# Specify your gem's dependencies in hockeyhelper.gemspec
 gemspec
 
 group :test do
