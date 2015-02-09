@@ -29,22 +29,31 @@ module Hockey
            end
     end
 
+    # The http wrapper for GET method to the HockayApp.
+    # you might give a block object if necessary.
     def get(path)
       @l.info "GET #{path}"
 
       response = @client.get do |req|
         req.url path
         req.headers['X-HockeyAppToken'] = @token
+        yield req if block_given?
       end
 
       response
     end
 
+    # The http wrapper for GET method to the HockayApp.
+    # you might give a block object if necessary.
+    # see the #get method
+    #
+    # Return the Hash object from response json.
     def get_object(path)
-      response = get path
+      response = get(path)
       JSON.parse(response.body) || {}
     end
 
+    # The http wrapper for POST method to the HockayApp.
     def post(path, bodyhash)
       @l.info "POST #{path}, #{bodyhash}"
 
