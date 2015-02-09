@@ -3,6 +3,7 @@
 Helper gem for HokceyApp API
 
 [![Build Status](https://travis-ci.org/yagihiro/hockey.svg?branch=master)](https://travis-ci.org/yagihiro/hockey)
+[![Gem Version](https://badge.fury.io/rb/hockeyhelper.svg)](http://badge.fury.io/rb/hockeyhelper)
 
 ## Installation
 
@@ -20,7 +21,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+create a new app and an invite user
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    app = client.new_app(title: appname, bundle_identifier: bundleid, platform: platform)
+    user = app.invite_user(email: email)
+
+list all apps
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    apps = client.apps
+
+list all teams
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    teams = client.teams
 
 ## Contributing
 
