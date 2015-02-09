@@ -1,6 +1,6 @@
-# Hockey
+# hockeyhelper gem
 
-Helper gem for HokceyApp API
+Helper gem for HokceyApp API.
 
 [![Build Status](https://travis-ci.org/yagihiro/hockey.svg?branch=master)](https://travis-ci.org/yagihiro/hockey)
 [![Gem Version](https://badge.fury.io/rb/hockeyhelper.svg)](http://badge.fury.io/rb/hockeyhelper)
@@ -33,6 +33,24 @@ list all apps
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
     apps = client.apps
+
+list all versions for an app
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    versions = client.apps[0].versions
+
+list all users for an app
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    users = client.apps[0].users
+
+remove a user from an app
+
+    require 'hockeyhelper'
+    client = Hockey::Client.new 'yourapitoken'
+    client.apps[0].remove_user 'email@xxx.xx'
 
 list all teams
 
