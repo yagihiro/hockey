@@ -10,6 +10,7 @@ module Hockey
     def initialize(token, debug:false)
       @net = Networking.new token, debug:debug
       @apps = nil
+      @teams = nil
     end
 
     # return Array of App objects
@@ -24,6 +25,30 @@ module Hockey
       end
 
       @apps
+    end
+
+    # return Array of Team objects
+    def teams
+      return @teams if @teams
+
+      @teams = []
+      page = 1
+
+      while true
+        obj = @net.get_object('/api/2/teams') do |req|
+          req.params[:page] = page
+        end
+        obj['teams'].each do |hashobj|
+          @teams << Team.create_from(hashobj, @net)
+        end
+
+        total = obj['total_pages'].to_i
+        break unless page < total
+
+        page = page + 1
+      end
+
+      @teams
     end
 
     # create new app on HockeyApp
