@@ -39,6 +39,7 @@ module Hockey
     end
     alias_method :to_s, :inspect
 
+    # Remove a user from an app on HockeyApp.
     def remove_user(email:nil)
       users()
       user = @users.find {|u| u.email == email }
@@ -48,6 +49,8 @@ module Hockey
       end
     end
 
+    # List all users of an app on HockeyApp.
+    # return an Array of User objects.
     def users
       return @users if @users
 
@@ -61,6 +64,8 @@ module Hockey
       @users
     end
 
+    # List all versions of an app. The endpoint returns all versions for developer and members, but only released versions for testers.
+    # return an Array of Version objects.
     def versions
       return @versions if @versions
 
@@ -74,6 +79,8 @@ module Hockey
       @versions
     end
 
+    # Invite a user to an app.
+    # return a User object.
     def invite_user(email:email)
       obj = @net.post_object "/api/2/apps/#{@public_identifier}/app_users", {:email=>email, :role=>1}
 

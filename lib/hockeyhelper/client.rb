@@ -13,7 +13,8 @@ module Hockey
       @teams = nil
     end
 
-    # return Array of App objects
+    # List all apps for the logged user, including owned apps, developer apps, member apps, and tester apps on HockeyApp.
+    # return Array of App objects.
     def apps
       return @apps if @apps
 
@@ -51,7 +52,8 @@ module Hockey
       @teams
     end
 
-    # create new app on HockeyApp
+    # Create a new app without uploading a file on HockeyApp.
+    # return an App object.
     def new_app(title:title, bundle_identifier:bundle_identifier, platform: 'iOS')
       obj = @net.post_object '/api/2/apps/new', {:title=>title, :bundle_identifier=>bundle_identifier, :platform=>platform, :release_type=>0}
 
