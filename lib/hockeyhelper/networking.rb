@@ -19,7 +19,9 @@ module Hockey
 
     attr :l
 
-    def initialize(token, debug:false)
+    def initialize(token, debug: false)
+      raise(ArgumentError, 'token must be an instance of String') unless token.kind_of?(String)
+
       @client = Faraday.new(:url => 'https://rink.hockeyapp.net')
       @token = token
       @l = if debug
