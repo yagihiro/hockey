@@ -39,16 +39,6 @@ module Hockey
     end
     alias_method :to_s, :inspect
 
-    # Remove a user from an app on HockeyApp.
-    def remove_user(email:nil)
-      users()
-      user = @users.find {|u| u.email == email }
-
-      if user
-        @net.delete "/api/2/apps/#{@public_identifier}/app_users/#{user.id}"
-      end
-    end
-
     # List all users of an app on HockeyApp.
     # return an Array of User objects.
     def users
@@ -62,6 +52,26 @@ module Hockey
       end
 
       @users
+    end
+
+    # Invite a user to an app.
+    # return a User object.
+    def invite_user(email:email)
+      obj = @net.post_object "/api/2/apps/#{@public_identifier}/app_users", {:email=>email, :role=>1}
+
+      user = User.create_from(obj, @net)
+
+      user
+    end
+
+    # Remove a user from an app on HockeyApp.
+    def remove_user(email:nil)
+      users()
+      user = @users.find {|u| u.email == email }
+
+      if user
+        @net.delete "/api/2/apps/#{@public_identifier}/app_users/#{user.id}"
+      end
     end
 
     # List all versions of an app. The endpoint returns all versions for developer and members, but only released versions for testers.
@@ -79,14 +89,22 @@ module Hockey
       @versions
     end
 
-    # Invite a user to an app.
-    # return a User object.
-    def invite_user(email:email)
-      obj = @net.post_object "/api/2/apps/#{@public_identifier}/app_users", {:email=>email, :role=>1}
+    # List all crash groups for an app.
+    # return an Array of CrashReason objects.
+    #
+    # +sort+ parameter:
+    #   :date, :class, :number_of_crashes, :last_crash_at
+    # +order+ parameter:
+    #   :asc, :desc
+    def crash_reasons(page: 1, per: 25, symbolicated: true, sort: :date, order: :asc)
+      obj = @net.get_object "/api/2/apps/#{@public_identifier}/crash_reasons"
 
-      user = User.create_from(obj, @net)
+      cr = []
+      obj['crash_reasons'].each do |hashobj|
+        cr << CrashReason.create_from(hashobj, @net)
+      end
 
-      user
+      cr
     end
 
   end

@@ -7,11 +7,11 @@ module Hockey
   class NullLogger < Logger
     def initialize *args
     end
-    def debug; end
-    def info; end
-    def warn; end
-    def error; end
-    def fatal; end
+    def debug(*args); end
+    def info(*args); end
+    def warn(*args); end
+    def error(*args); end
+    def fatal(*args); end
   end
 
   # Networking Core Lib
@@ -19,7 +19,9 @@ module Hockey
 
     attr :l
 
-    def initialize(token, debug:false)
+    def initialize(token, debug: false)
+      raise(ArgumentError, 'token must be an instance of String') unless token.kind_of?(String)
+
       @client = Faraday.new(:url => 'https://rink.hockeyapp.net')
       @token = token
       @l = if debug
