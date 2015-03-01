@@ -7,11 +7,11 @@ module Hockey
   class NullLogger < Logger
     def initialize *args
     end
-    def debug; end
-    def info; end
-    def warn; end
-    def error; end
-    def fatal; end
+    def debug(*args); end
+    def info(*args); end
+    def warn(*args); end
+    def error(*args); end
+    def fatal(*args); end
   end
 
   # Networking Core Lib
