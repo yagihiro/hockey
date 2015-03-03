@@ -5,6 +5,6 @@ task :default => :test
 
 Rake::TestTask.new do |t|
   t.libs << 'lib'
-  t.test_files = FileList['spec/*_test.rb']
+  t.test_files = FileList['spec/*_spec.rb']
   t.warning = true
 end
