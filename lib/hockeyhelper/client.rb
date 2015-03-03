@@ -10,28 +10,35 @@ module Hockey
     #
     def initialize(token, debug: false, network: nil)
       @net = network || Networking.new(token, debug:debug)
-      @apps = nil
-      @teams = nil
+      @cached_apps = nil
     end
 
     # List all apps for the logged user, including owned apps, developer apps, member apps, and tester apps on HockeyApp.
-    # return Array of App objects.
-    def apps
-      return @apps if @apps
+    #
+    # @return [Array<App>] an array of {App} objects.
+    # @param page [Fixnum] optional, used for pagination
+    def apps(page: 1)
+      return @cached_apps if @cached_apps
 
-      obj = @net.get_object '/api/2/apps'
+      @cached_apps ||= []
 
-      @apps = []
-      obj['apps'].each do |hashobj|
-        @apps << App.create_from(hashobj, @net)
+      if @cached_apps.empty?
+        obj = @net.get_object '/api/2/apps'
+        obj['apps'].each do |hashobj|
+          @cached_apps << App.create_from(hashobj, @net)
+        end
       end
 
-      @apps
+      apps = PagingArray.new
+      apps.replace(@cached_apps[(page - 1) * apps.per_page, apps.per_page])
+      apps.update_page_with(page, @cached_apps.size)
+
+      apps
     end
 
     # List all teams for an account.
     #
-    # @return [Array] of {Team} objects
+    # @return [Hockey::PagingArray<Team>] an array of {Team} objects
     # @param page [Fixnum] optional, used for pagination
     def teams(page: 1)
       teams = PagingArray.new
