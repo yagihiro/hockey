@@ -18,8 +18,6 @@ module Hockey
     # @return [Array<App>] an array of {App} objects.
     # @param page [Fixnum] optional, used for pagination
     def apps(page: 1)
-      return @cached_apps if @cached_apps
-
       @cached_apps ||= []
 
       if @cached_apps.empty?
