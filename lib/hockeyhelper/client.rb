@@ -1,5 +1,6 @@
 require_relative 'app'
 require_relative 'networking'
+require_relative 'paging_array'
 
 module Hockey
 
@@ -29,27 +30,19 @@ module Hockey
     end
 
     # return Array of Team objects
-    def teams
-      return @teams if @teams
+    def teams(page: 1)
+      teams = PagingArray.new
 
-      @teams = []
-      page = 1
-
-      while true
-        obj = @net.get_object('/api/2/teams') do |req|
-          req.params[:page] = page
-        end
-        obj['teams'].each do |hashobj|
-          @teams << Team.create_from(hashobj, @net)
-        end
-
-        total = obj['total_pages'].to_i
-        break unless page < total
-
-        page = page + 1
+      obj = @net.get_object('/api/2/teams') do |req|
+        req.params[:page] = page
+      end
+      obj['teams'].each do |hashobj|
+        teams << Team.create_from(hashobj, @net)
       end
 
-      @teams
+      teams.update_page(obj)
+
+      teams
     end
 
     # Create a new app without uploading a file on HockeyApp.
