@@ -20,11 +20,8 @@ describe Hockey::Client do
 
   describe 'teams' do
 
-    it 'when succeeded' do
-      net_mock = Minitest::Mock.new
-      client = Hockey::Client.new 'token', network: net_mock
-
-      object =<<_EOS_
+    before do
+      @page1 =<<_EOS_
 {
     "teams": [
         {
@@ -43,8 +40,7 @@ describe Hockey::Client do
     "total_pages": 2
 }
 _EOS_
-      net_mock.expect(:get_object, JSON.parse(object), ['/api/2/teams'])
-      object =<<_EOS_
+      @page2 =<<_EOS_
 {
     "teams": [
         {
@@ -59,17 +55,53 @@ _EOS_
     "total_pages": 2
 }
 _EOS_
-      net_mock.expect(:get_object, JSON.parse(object), ['/api/2/teams'])
+    end
 
+    it 'when succeeded' do
+      net_mock = Minitest::Mock.new
+      client = Hockey::Client.new 'token', network: net_mock
+
+      net_mock.expect(:get_object, JSON.parse(@page1), ['/api/2/teams'])
       teams = client.teams
-      teams.must_be_instance_of Array
-      teams.size.must_equal 3
+      teams.must_be_kind_of Hockey::PagingArray
+      teams.size.must_equal 2
       teams.each do |obj|
         obj.must_be_instance_of Hockey::Team
       end
       teams[0].id.must_equal 23
       teams[1].id.must_equal 42
-      teams[2].id.must_equal 50
+      net_mock.verify
+    end
+
+    it 'when success w/ paging' do
+      net_mock = Minitest::Mock.new
+      client = Hockey::Client.new 'token', network: net_mock
+
+      net_mock.expect(:get_object, JSON.parse(@page1), ['/api/2/teams'])
+      teams = client.teams(page: 1)
+      teams.must_be_kind_of Hockey::PagingArray
+      teams.size.must_equal 2
+      teams.each do |obj|
+        obj.must_be_instance_of Hockey::Team
+      end
+      teams[0].id.must_equal 23
+      teams[1].id.must_equal 42
+      teams.current_page.must_equal 1
+      teams.total_entries.must_equal 3
+      teams.total_pages.must_equal 2
+
+      net_mock.expect(:get_object, JSON.parse(@page2), ['/api/2/teams'])
+      teams = client.teams(page: 2)
+      teams.must_be_kind_of Hockey::PagingArray
+      teams.size.must_equal 1
+      teams.each do |obj|
+        obj.must_be_instance_of Hockey::Team
+      end
+      teams[0].id.must_equal 50
+      teams.current_page.must_equal 2
+      teams.total_entries.must_equal 3
+      teams.total_pages.must_equal 2
+
       net_mock.verify
     end
 
