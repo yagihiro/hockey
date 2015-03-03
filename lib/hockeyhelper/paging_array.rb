@@ -19,6 +19,14 @@ module Hockey
       self
     end
 
+    def update_page_with(page, size)
+      @current_page = page
+      @total_entries = size
+      @total_pages = (size / @per_page) + 1
+
+      self
+    end
+
   end
 
   class OrderedPagingArray < PagingArray
