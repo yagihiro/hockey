@@ -55,7 +55,7 @@ module Hockey
 
     # Create a new app without uploading a file on HockeyApp.
     # return an App object.
-    def new_app(title:, bundle_identifier:, platform: 'iOS')
+    def new_app(title: '', bundle_identifier: '', platform: 'iOS')
       obj = @net.post_object '/api/2/apps/new', {:title=>title, :bundle_identifier=>bundle_identifier, :platform=>platform, :release_type=>0}
 
       app = App.create_from(obj, @net)
