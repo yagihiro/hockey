@@ -1,6 +1,6 @@
 module Hockey
 
-  VERSION = "0.0.2"
+  VERSION = "0.0.3"
 
   # Version on HockeyApp
   class Version
