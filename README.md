@@ -28,35 +28,35 @@ create a new app and an invite user
     app = client.new_app(title: appname, bundle_identifier: bundleid, platform: platform)
     user = app.invite_user(email: email)
 
-list all apps
+list all apps with paging
 
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
-    apps = client.apps
+    apps = client.apps(page: 1)
 
 list all versions for an app
 
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
-    versions = client.apps[0].versions
+    versions = client.apps(page: 1)[0].versions
 
 list all users for an app
 
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
-    users = client.apps[0].users
+    users = client.apps(page: 1)[0].users
 
 remove a user from an app
 
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
-    client.apps[0].remove_user 'email@xxx.xx'
+    client.apps(page: 1)[0].remove_user 'email@xxx.xx'
 
-list all teams
+list all teams with paging
 
     require 'hockeyhelper'
     client = Hockey::Client.new 'yourapitoken'
-    teams = client.teams
+    teams = client.teams(page: 1)
 
 ## Contributing
 
