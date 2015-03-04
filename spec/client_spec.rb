@@ -18,6 +18,53 @@ describe Hockey::Client do
 
   end
 
+  describe 'apps' do
+
+    before do
+      @page1 =<<_EOS_
+{
+    "apps": [
+        {
+            "title": "HockeyTest",
+            "bundle_identifier": "de.codenauts.hockeytest.beta",
+            "public_identifier": "1234567890abcdef1234567890abcdef",
+            "device_family": "iPhone/iPod",
+            "minimum_os_version": "4.0",
+            "release_type": 0,
+            "status": 2,
+            "platform": "iOS"
+        },
+        {
+            "title": "HockeyTest",
+            "bundle_identifier": "de.codenauts.hockeytest",
+            "public_identifier": "34567890abcdef1234567890abcdef12",
+            "release_type": 1,
+            "platform": "iOS"
+        }
+    ],
+    "status": "success"
+}
+_EOS_
+    end
+
+    it 'when succeeded' do
+      net_mock = Minitest::Mock.new
+      client = Hockey::Client.new 'token', network: net_mock
+
+      net_mock.expect(:get_object, JSON.parse(@page1), ['/api/2/apps'])
+      apps = client.apps(page: 1)
+      apps.must_be_kind_of Hockey::PagingArray
+      apps.size.must_equal 2
+      apps.each do |obj|
+        obj.must_be_instance_of Hockey::App
+      end
+      apps[0].bundle_identifier.must_equal 'de.codenauts.hockeytest.beta'
+      apps[1].bundle_identifier.must_equal 'de.codenauts.hockeytest'
+      net_mock.verify
+    end
+
+  end
+
   describe 'teams' do
 
     before do
