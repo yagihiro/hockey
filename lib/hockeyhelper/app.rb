@@ -1,6 +1,8 @@
 module Hockey
 
   # App on HockeyApp
+  #
+  # @see http://support.hockeyapp.net/kb/api/api-apps HokceyApp Apps API Reference
   class App
 
     attr_reader :title
@@ -15,10 +17,15 @@ module Hockey
 
     attr :net
 
+    # Construct a new instance of {App}
+    #
+    # @param hashobj [Hash] an instance of app receiving from HockeyApp
+    # @param networking [Hockey::Networking] an instance of Hockey::Networking object
     def self.create_from(hashobj, networking)
       self.new hashobj, networking
     end
 
+    # Construct a new instance of {App}
     def initialize(hashobj, networking)
       @title = hashobj['title']
       @bundle_identifier = hashobj['bundle_identifier']
@@ -40,7 +47,8 @@ module Hockey
     alias_method :to_s, :inspect
 
     # List all users of an app on HockeyApp.
-    # return an Array of User objects.
+    #
+    # @return [Array<User>] fetched {User} objects from HockeyApp.
     def users
       return @users if @users
 
@@ -56,7 +64,7 @@ module Hockey
 
     # Invite a user to an app.
     # return a User object.
-    def invite_user(email:email)
+    def invite_user(email: '')
       obj = @net.post_object "/api/2/apps/#{@public_identifier}/app_users", {:email=>email, :role=>1}
 
       user = User.create_from(obj, @net)
@@ -65,7 +73,7 @@ module Hockey
     end
 
     # Remove a user from an app on HockeyApp.
-    def remove_user(email:nil)
+    def remove_user(email: nil)
       users()
       user = @users.find {|u| u.email == email }
 
