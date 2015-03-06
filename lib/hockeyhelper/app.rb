@@ -1,3 +1,5 @@
+require_relative 'paging_array'
+
 module Hockey
 
   # App on HockeyApp
@@ -37,7 +39,7 @@ module Hockey
       @platform = hashobj['platform']
       @original_hash = hashobj
       @net = networking
-      @users = nil
+      @cached_users = nil
       @versions = nil
     end
 
@@ -49,17 +51,17 @@ module Hockey
     # List all users of an app on HockeyApp.
     #
     # @return [Array<User>] fetched {User} objects from HockeyApp.
-    def users
-      return @users if @users
+    def users(page: 1)
+      @cached_users ||= []
 
-      obj = @net.get_object "/api/2/apps/#{@public_identifier}/app_users"
-
-      @users = []
-      obj['app_users'].each do |hashobj|
-        @users << User.create_from(hashobj, @net)
+      if @cached_users.empty?
+        obj = @net.get_object "/api/2/apps/#{@public_identifier}/app_users"
+        obj['app_users'].each do |hashobj|
+          @cached_users << User.create_from(hashobj, @net)
+        end
       end
 
-      @users
+      PagingArray.paginate with: @cached_users, page: page
     end
 
     # Invite a user to an app.
