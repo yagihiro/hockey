@@ -27,11 +27,7 @@ module Hockey
         end
       end
 
-      apps = PagingArray.new
-      apps.replace(@cached_apps[(page - 1) * apps.per_page, apps.per_page])
-      apps.update_page_with(page, @cached_apps.size)
-
-      apps
+      PagingArray.paginate with: @cached_apps, page: page
     end
 
     # List all teams for an account.
