@@ -40,7 +40,7 @@ module Hockey
       @original_hash = hashobj
       @net = networking
       @cached_users = nil
-      @versions = nil
+      @cached_versions = nil
     end
 
     def inspect
@@ -86,17 +86,17 @@ module Hockey
 
     # List all versions of an app. The endpoint returns all versions for developer and members, but only released versions for testers.
     # return an Array of Version objects.
-    def versions
-      return @versions if @versions
+    def versions(page: 1)
+      @cached_versions ||= []
 
-      obj = @net.get_object "/api/2/apps/#{@public_identifier}/app_versions"
-
-      @versions = []
-      obj['app_versions'].each do |hashobj|
-        @versions << Version.create_from(hashobj, @net)
+      if @cached_versions.empty?
+        obj = @net.get_object "/api/2/apps/#{@public_identifier}/app_versions"
+        obj['app_versions'].each do |hashobj|
+          @cached_versions << Version.create_from(hashobj, @net)
+        end
       end
 
-      @versions
+      PagingArray.paginate with: @cached_versions, page: page
     end
 
     # List all crash groups for an app.
@@ -106,7 +106,7 @@ module Hockey
     #   :date, :class, :number_of_crashes, :last_crash_at
     # +order+ parameter:
     #   :asc, :desc
-    def crash_reasons(page: 1, per: 25, symbolicated: true, sort: :date, order: :asc)
+    def crash_reasons(page: 1, symbolicated: true, sort: :date, order: :asc)
       obj = @net.get_object "/api/2/apps/#{@public_identifier}/crash_reasons"
 
       cr = []
