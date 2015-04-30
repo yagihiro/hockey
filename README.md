@@ -23,40 +23,52 @@ Or install it yourself as:
 
 create a new app and an invite user
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    app = client.new_app(title: appname, bundle_identifier: bundleid, platform: platform)
-    user = app.invite_user(email: email)
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+app = client.new_app(title: appname, bundle_identifier: bundleid, platform: platform)
+user = app.invite_user(email: email)
+```
 
 list all apps with paging
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    apps = client.apps(page: 1)
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+apps = client.apps(page: 1)
+```
 
 list all versions for an app
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    versions = client.apps(page: 1)[0].versions
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+versions = client.apps(page: 1)[0].versions
+```
 
 list all users for an app
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    users = client.apps(page: 1)[0].users
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+users = client.apps(page: 1)[0].users
+```
 
 remove a user from an app
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    client.apps(page: 1)[0].remove_user 'email@xxx.xx'
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+client.apps(page: 1)[0].remove_user 'email@xxx.xx'
+```
 
 list all teams with paging
 
-    require 'hockeyhelper'
-    client = Hockey::Client.new 'yourapitoken'
-    teams = client.teams(page: 1)
+```ruby
+require 'hockeyhelper'
+client = Hockey::Client.new 'yourapitoken'
+teams = client.teams(page: 1)
+```
 
 ## Contributing
 
