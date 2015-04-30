@@ -76,11 +76,17 @@ module Hockey
 
     # Remove a user from an app on HockeyApp.
     def remove_user(email: nil)
-      users()
-      user = @users.find {|u| u.email == email }
+      begin
+        total_pages = users().total_pages
+      rescue => e
+        return
+      end
 
-      if user
-        @net.delete "/api/2/apps/#{@public_identifier}/app_users/#{user.id}"
+      1.upto(total_pages) do |page|
+        user = users(page: page).find {|u| u.email == email }
+        if user
+          @net.delete "/api/2/apps/#{@public_identifier}/app_users/#{user.id}"
+        end
       end
     end
 
