@@ -1,10 +1,11 @@
 module Hockey
 
-  VERSION = '0.0.6'
+  VERSION = '0.0.7'
 
   # Version on HockeyApp
   class Version
 
+    attr_reader :id
     attr_reader :version
     attr_reader :mandatory
     attr_reader :config_url
@@ -25,6 +26,7 @@ module Hockey
     end
 
     def initialize(hashobj, networking)
+      @id = hashobj['id']
       @version = hashobj['version']
       @mandatory = hashobj['mandatory']
       @config_url = hashobj['config_url']
@@ -42,7 +44,7 @@ module Hockey
     end
 
     def inspect
-      "#{@title} #{@version}"
+      "#{@title} #{@id} #{@version}"
     end
     alias_method :to_s, :inspect
 
