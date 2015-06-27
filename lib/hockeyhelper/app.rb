@@ -123,6 +123,23 @@ module Hockey
       cr
     end
 
+    def crashes_histogram(date: Date.today, version: nil)
+      start = date.strftime
+      url = "/api/2/apps/#{@public_identifier}"
+      if version
+        url += "/app_versions/#{version.id}/crashes/histogram?start_date=#{start}&end_date=#{start}"
+      else
+        url += "/crashes/histogram?start_date=#{start}&end_date=#{start}"
+      end
+      obj = @net.get_object url
+      histogram ||= {}
+      obj['histogram'].each do |arr|
+        histogram = {:date=>arr[0], :count=>arr[1]}
+      end
+
+      histogram
+    end
+
   end
 
 end
